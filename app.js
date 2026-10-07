@@ -113,7 +113,7 @@
     if (/profile (views|visits|activity)|page (views|visits)|visitors|profile visits/.test(h)) return "profileVisits";
     if (/difference in followers|new follow|net follow|followers gained|organic followers|sponsored followers|auto-invited followers|^follows$|follows \(/.test(h)) return "newFollowers";
     if (/followers/.test(h)) return "followers";
-    if (/unique impressions|reach|accounts reached/.test(h)) return "reach";
+    if (/unique impressions|reach|accounts reached|viewers/.test(h)) return "reach"; // Meta renamed reach to "Viewers"
     if (/impressions|views|plays/.test(h)) return "impressions";
     if (/^(total )?(engagements?|interactions|content interactions)( \(total\))?$/.test(h)) return "engagements";
     if (/likes|reactions/.test(h)) return "likes";
@@ -130,7 +130,7 @@
     if (/visit/.test(ctx)) return "profileVisits";
     if (/follows|new follow/.test(ctx)) return "newFollowers";
     if (/follower/.test(ctx)) return "followers";
-    if (/reach/.test(ctx)) return "reach";
+    if (/reach|viewer/.test(ctx)) return "reach"; // Meta renamed reach to "Viewers"
     if (/view|impression|play/.test(ctx)) return "impressions";
     if (/interaction|engagement/.test(ctx)) return "engagements";
     if (/link click|click/.test(ctx)) return "clicks";
@@ -327,7 +327,8 @@
           }).then(function (buf) {
             var res = parseFile(buf, f.path.split("/").pop(), platform);
             var got = describeResult(res);
-            state.files.push({ path: f.path, platform: platform, ok: !!got, note: got || "no dates or recognisable columns found" });
+            // An empty manual sheet is normal, not an error.
+            state.files.push({ path: f.path, platform: platform, ok: !!got || platform === "manual", note: got || "no dates or recognisable columns found" });
           }).catch(function (e) {
             state.files.push({ path: f.path, platform: platform, ok: false, note: e.message });
           });
@@ -432,7 +433,7 @@
     if (prev.length < n) prev = [];
     model.weeks = weeks; model.cur = cur; model.prev = prev;
 
-    var okFiles = state.files.filter(function (f) { return f.ok; }).length;
+    var okFiles = state.files.filter(function (f) { return f.ok && f.platform !== "manual"; }).length;
     $("subtitle").textContent = weeks.length
       ? "Week of " + longDate(cur[0]) + " – week of " + longDate(cur[cur.length - 1]) + " · " + okFiles + " export files" + (state.previewCount ? " · including " + state.previewCount + " previewed files (not saved)" : "")
       : (state.files.length ? "No usable data found in the export files yet." : "No export files yet: upload them to the data folders.");

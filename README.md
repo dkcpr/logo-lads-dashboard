@@ -15,29 +15,45 @@ A web page that turns the export files from Instagram, Facebook, LinkedIn and Ti
    `https://YOUR-USERNAME.github.io/logo-lads-dashboard/`
    That's the link to bookmark and send to the client.
 
-## Weekly routine (about 10 minutes)
+## Weekly routine (about 15 minutes)
 
-1. **Download the exports** (steps below). Choose the longest date range each platform offers. Overlapping dates are fine.
-2. **Put the date at the start of each file name**, e.g. `2026-10-05 Overview.csv`. Where two files cover the same day, the newer one wins.
-3. In GitHub, open `data` → the platform's folder (e.g. `data/tiktok`) → **Add file** → **Upload files**. Drag the files in and click **Commit changes**.
-4. Refresh the dashboard after a minute or two. The status boxes at the top turn green when a platform's data is current. They turn yellow when it's more than 10 days old.
+### 1. Download the exports
+
+Pick the longest date range each time. Overlapping dates are fine.
+
+| Platform | Where | Files |
+|---|---|---|
+| **Instagram** | business.facebook.com/latest/insights/results → platform box: **Instagram** → date: **Last 90 days** → **Export → CSV** on each card | Views, Viewers, Follows, Visits, Interactions, Link clicks (6 CSVs) |
+| **Facebook** | Same page → platform box: **Facebook** → same 6 cards | Same 6 CSVs |
+| **LinkedIn** | Company page, admin view → **Analytics → Content → Export**, then **Analytics → Followers → Export** (longest range) | `…_content_….xls` and `…_followers_….xls` |
+| **TikTok** | tiktok.com/tiktokstudio → **Analytics** → longest range → **Download data** on the Overview, Content and Followers tabs | `Overview.csv`, `Content.csv`, and from the Followers download only `FollowerHistory.csv` |
+
+Instagram and Facebook files download with the same names. Do one platform at a time, renaming and uploading it before you start the next.
+
+Skip TikTok's FollowerActivity, FollowerGender and FollowerTopTerritories files. They're usually empty.
+
+### 2. Rename
+
+Put the date at the start of each file name, e.g. `2026-10-18 Views.csv`. Where two files cover the same day, the newer name wins.
+
+### 3. Upload
+
+Open the platform's folder upload page, drag the files in, and click the green **Commit changes** button at the bottom. Nothing is saved until you click it.
+
+- Instagram: github.com/dkcpr/logo-lads-dashboard/upload/main/data/instagram
+- Facebook: github.com/dkcpr/logo-lads-dashboard/upload/main/data/facebook
+- LinkedIn: github.com/dkcpr/logo-lads-dashboard/upload/main/data/linkedin
+- TikTok: github.com/dkcpr/logo-lads-dashboard/upload/main/data/tiktok
+
+### 4. Check
+
+Wait about 5 minutes, then reload the dashboard. If anything looks stale, press Cmd+Shift+R. Each platform's status box turns green when its data is current and yellow when it's more than 10 days old. A yellow box at the top lists any file that couldn't be read.
 
 Not sure a file will work? Drag it onto the dashboard page first. It previews the file in your browser without uploading anything.
 
-## Which exports to download
-
-Menu names change from time to time. If one has moved, look for **Export** or **Download data** in the platform's analytics area.
-
-| Platform | Where | Files to get |
-|---|---|---|
-| Instagram | Meta Business Suite → Insights → choose Instagram → **Export data** | The overview metrics (Reach, Follows, Views, Interactions) as CSV, plus the **Content** export (one row per post) |
-| Facebook | Meta Business Suite → Insights → choose Facebook → **Export data** | Same as Instagram: overview metrics and the Content export |
-| LinkedIn | Your company page, admin view → **Analytics** → Content, then Followers → **Export** | The content export (daily impressions and engagement, plus all posts) and the followers export |
-| TikTok | TikTok Studio on desktop → **Analytics** → **Download data** | Overview, Content and Followers |
-
 ## Numbers no export gives you
 
-Some exports don't include a total follower count. Meta's overview, for example, only gives new follows, and LinkedIn only gives daily new followers. For those, open `data/manual/weekly.csv` in GitHub (click the file, then the pencil icon) and add one line per week:
+TikTok's FollowerHistory gives a follower total automatically. Instagram, Facebook and LinkedIn exports only give *new* followers. For their totals, check each profile page about once a month, then open `data/manual/weekly.csv` in GitHub (click the file, then the pencil icon) and add one line per week:
 
 ```
 week_start,platform,followers,new_followers,reach,impressions,engagements,posts

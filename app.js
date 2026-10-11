@@ -456,7 +456,9 @@
     $("fresh").innerHTML = PLATFORMS.map(function (p) {
       var latest = null;
       Object.keys(state.daily).forEach(function (k) { if (k.indexOf(p.id + "|") === 0) { var d = k.split("|")[1]; if (!latest || d > latest) latest = d; } });
-      Object.keys(state.manual).forEach(function (k) { if (k.indexOf(p.id + "|") === 0) { var d = addDays(k.split("|")[1], 6); if (!latest || d > latest) latest = d; } });
+      // A manual weekly row counts as data through the end of its week, but never past yesterday.
+      var yesterday = addDays(today, -1);
+      Object.keys(state.manual).forEach(function (k) { if (k.indexOf(p.id + "|") === 0) { var d = addDays(k.split("|")[1], 6); if (d > yesterday) d = yesterday; if (!latest || d > latest) latest = d; } });
       var latestPost = null;
       Object.keys(state.posts).forEach(function (k) { var po = state.posts[k]; if (po.platform === p.id && (!latestPost || po.date > latestPost)) latestPost = po.date; });
       var files = state.files.filter(function (f) { return f.platform === p.id && f.ok; }).length;
@@ -493,8 +495,13 @@
     function total(fn, weeks) { var s = null; ids.forEach(function (p) { var v = fn(p, weeks); if (v != null) s = (s || 0) + v; }); return s; }
     var fol = total(function (p, w) { return lastIn(W, p, w, "followers"); }, cur);
     var folPrev = prev.length ? total(function (p, w) { return lastIn(W, p, w, "followers"); }, prev) : null;
+    // Say which platforms the total covers until every platform with data has a follower count.
+    var withData = ids.filter(function (p) { return cur.some(function (w) { return W[p] && W[p][w]; }); });
+    var withTotals = withData.filter(function (p) { return lastIn(W, p, cur, "followers") != null; });
+    var folNote = withTotals.length && withTotals.length < withData.length
+      ? withTotals.map(function (p) { return PNAME[p]; }).join(" + ") + " only" : null;
     var tiles = [
-      { label: "Total followers", v: fol, p: folPrev, f: fmt },
+      { label: "Total followers", v: fol, p: folPrev, f: fmt, note: folNote },
       { label: "Net new followers", v: total(function (p, w) { return sumRange(W, p, w, "newFollowers"); }, cur), p: prev.length ? total(function (p, w) { return sumRange(W, p, w, "newFollowers"); }, prev) : null, f: function (n) { return n == null ? "–" : (n > 0 ? "+" : "") + fmt(n); } },
       { label: "Reach", v: total(function (p, w) { return sumRange(W, p, w, "reach"); }, cur), p: prev.length ? total(function (p, w) { return sumRange(W, p, w, "reach"); }, prev) : null, f: fmt },
       { label: "Impressions / views", v: total(function (p, w) { return sumRange(W, p, w, "impressions"); }, cur), p: prev.length ? total(function (p, w) { return sumRange(W, p, w, "impressions"); }, prev) : null, f: fmt },
@@ -502,7 +509,7 @@
       { label: "Engagement rate", v: rateRange(W, ids, cur), p: prev.length ? rateRange(W, ids, prev) : null, f: fmtRate, rate: true }
     ];
     $("kpis").innerHTML = tiles.map(function (t) {
-      return '<div class="card kpi"><div class="label">' + t.label + '</div><div class="value">' + t.f(t.v) + "</div>" + deltaHTML(t.v, t.p, t.rate) + "</div>";
+      return '<div class="card kpi"><div class="label">' + t.label + '</div><div class="value">' + t.f(t.v) + "</div>" + (t.note ? '<div class="delta">' + esc(t.note) + "</div>" : deltaHTML(t.v, t.p, t.rate)) + "</div>";
     }).join("");
   }
 

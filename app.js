@@ -89,11 +89,12 @@
     if (m) { var y = +m[3]; if (y < 100) y += 2000; return y + "-" + pad(+m[1]) + "-" + pad(+m[2]); }
     if (!/[a-z]/i.test(s) && !/\d{4}/.test(s)) return null;
     if (!/\d{4}/.test(s)) {
-      // Year-less dates like "September 1" (TikTok): assume the most recent such date.
+      // Year-less dates like "September 1" (TikTok): assume the most recent such date before today.
+      // Exports end yesterday at the latest, so today's or a later date belongs to last year.
       var now = new Date();
       d = new Date(s + " " + now.getFullYear());
       if (isNaN(d)) return null;
-      if (d - now > 2 * 86400000) d.setFullYear(d.getFullYear() - 1);
+      if (isoLocal(d) >= isoLocal(now)) d.setFullYear(d.getFullYear() - 1);
       return isoLocal(d);
     }
     d = new Date(s.replace(/(\d)(st|nd|rd|th)\b/, "$1"));

@@ -182,6 +182,9 @@
       else m = classify(h);
       if (m) map.push([i, m]);
     });
+    // LinkedIn posts report "Impressions" plus video "Views": count impressions only, don't add them up.
+    if (map.some(function (cm) { return cm[1] === "impressions" && /impressions/.test(headers[cm[0]]); }))
+      map = map.filter(function (cm) { return cm[1] !== "impressions" || /impressions/.test(headers[cm[0]]); });
 
     var count = 0;
     if (isPosts) {

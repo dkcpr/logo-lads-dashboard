@@ -15,7 +15,7 @@ A web page that turns the export files from Instagram, Facebook, LinkedIn and Ti
    `https://YOUR-USERNAME.github.io/logo-lads-dashboard/`
    That's the link to bookmark and send to the client.
 
-## Weekly routine (about 15 minutes)
+## Monthly routine (about 15 minutes, first Wednesday of the month)
 
 ### 1. Download the exports
 
@@ -23,8 +23,8 @@ Pick the longest date range each time. Overlapping dates are fine.
 
 | Platform | Where | Files |
 |---|---|---|
-| **Instagram** | business.facebook.com/latest/insights/results → platform box: **Instagram** → date: **Last 90 days** → **Export → CSV** on each card | Views, Viewers, Follows, Visits, Interactions, Link clicks (6 CSVs) |
-| **Facebook** | Same page → platform box: **Facebook** → same 6 cards | Same 6 CSVs |
+| **Instagram** | business.facebook.com/latest/insights/results → platform box: **Instagram** → date: **Last 90 days** → **Export → CSV** on each card. Then **Insights → Content** → platform box: **Instagram** → longest range → **Export** | Views, Viewers, Follows, Visits, Interactions, Link clicks (6 CSVs), plus the Content export (one row per post; this is what fills Top posts) |
+| **Facebook** | Same pages → platform box: **Facebook** → same 6 cards, then the same Content export | Same 6 CSVs + Content export |
 | **LinkedIn** | Company page, admin view → **Analytics → Content → Export**, then **Analytics → Followers → Export** (longest range) | `…_content_….xls` and `…_followers_….xls` |
 | **TikTok** | tiktok.com/tiktokstudio → **Analytics** → longest range → **Download data** on the Overview, Content and Followers tabs | `Overview.csv`, `Content.csv`, and from the Followers download only `FollowerHistory.csv` |
 
@@ -47,7 +47,7 @@ Open the platform's folder upload page, drag the files in, and click the green *
 
 ### 4. Check
 
-Wait about 5 minutes, then reload the dashboard. If anything looks stale, press Cmd+Shift+R. Each platform's status box turns green when its data is current and yellow when it's more than 10 days old. A yellow box at the top lists any file that couldn't be read.
+Wait about 5 minutes, then reload the dashboard. If anything looks stale, press Cmd+Shift+R. Each platform's status box turns green when its data is current and yellow when it's more than 35 days old. A yellow box at the top lists any file that couldn't be read.
 
 Not sure a file will work? Drag it onto the dashboard page first. It previews the file in your browser without uploading anything.
 
